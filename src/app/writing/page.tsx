@@ -46,9 +46,10 @@ async function getCategories(): Promise<string[]> {
 export default async function WritingPage({
   searchParams,
 }: {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const selectedCategoryParam = searchParams?.category;
+  const sp = await searchParams;
+  const selectedCategoryParam = sp?.category;
   const selectedCategory = Array.isArray(selectedCategoryParam)
     ? selectedCategoryParam[0]
     : selectedCategoryParam;
