@@ -73,7 +73,7 @@ export default function Header() {
       </button>
 
       {open ? (
-        <div className="sm:hidden fixed inset-0 z-50 bg-white dark:bg-black">
+        <div className="sm:hidden fixed inset-0 z-[60] bg-white/95 dark:bg-black/95">
           <div className="flex items-center justify-between px-4 py-4">
             <Link href="/" className="hover:opacity-90 transition !no-underline" onClick={() => setOpen(false)}>
               <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
