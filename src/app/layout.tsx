@@ -31,11 +31,11 @@ export default function RootLayout({
         <header className="sticky top-0 z-50 border-b border-black/10 dark:border-white/10 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <Header />
         </header>
-        <main className="mx-auto max-w-5xl px-6 py-10">
+        <main className="px-2 sm:px-3 md:px-4 lg:px-6 py-10">
           {children}
         </main>
         <footer className="mt-12 border-t border-black/10 dark:border-white/10">
-          <div className="mx-auto max-w-5xl px-6 py-6 text-xs text-black/60 dark:text-white/60">
+          <div className="px-2 sm:px-3 md:px-4 lg:px-6 py-6 text-xs text-black/60 dark:text-white/60">
             © {new Date().getFullYear()} Nate Iles. All rights reserved.
           </div>
         </footer>

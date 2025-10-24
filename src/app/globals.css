@@ -5,6 +5,14 @@
   --foreground: #171717;
 }
 
+/* Feature-detect CSS Shapes support to toggle between wrapped vs fallback image */
+@supports (shape-outside: circle()) {
+  .shape-fallback { display: none; }
+}
+@supports not (shape-outside: circle()) {
+  .shape-wrap { display: none; }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -36,4 +44,27 @@ a {
 
 a:hover {
   text-decoration-thickness: 2px;
+}
+
+/* Wrapping text around the transparent headshot on desktop */
+.shape-wrap {
+  float: right;
+  /* CSS Shapes: wrap text to the contour of the transparent PNG */
+  shape-outside: url('/headshots/001-transparent.png');
+  -webkit-shape-outside: url('/headshots/001-transparent.png');
+  shape-image-threshold: 0.3;
+  shape-margin: 12px;
+  /* Explicit size required for shape-outside to take effect */
+  width: 480px;
+  height: 480px;
+  /* Visually render the image inside the float so text wraps the same asset */
+  background-image: url('/headshots/001-transparent.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  /* Spacing when floated into text */
+  margin-left: 1.5rem; /* ~ml-6 */
+  margin-bottom: 0.5rem; /* ~mb-2 */
+  position: relative;
+  z-index: 10; /* ensure image appears above text behind */
 }
