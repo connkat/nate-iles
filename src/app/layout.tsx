@@ -18,6 +18,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Nate Iles — Portfolio",
   description: "Portfolio and resume site for Nate Iles: bio, photography, projects, and writing.",
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({
