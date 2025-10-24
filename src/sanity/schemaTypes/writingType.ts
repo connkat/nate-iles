@@ -17,6 +17,19 @@ export const writingType = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: "category",
+      title: "Category",
+      type: "string",
+      options: {
+        list: [
+          { title: "Copywriting", value: "copywriting" },
+          { title: "Bylines", value: "bylines" },
+          { title: "Biographies", value: "biographies" },
+          { title: "Other", value: "other" },
+        ],
+      },
+    }),
+    defineField({
       name: "url",
       type: "url",
       title: "URL",
@@ -32,19 +45,6 @@ export const writingType = defineType({
       name: "excerpt",
       type: "text",
       rows: 3,
-    }),
-    defineField({
-      name: "category",
-      title: "Category",
-      type: "string",
-      options: {
-        list: [
-          { title: "Copywriting", value: "copywriting" },
-          { title: "Bylines", value: "bylines" },
-          { title: "Biographies", value: "biographies" },
-          { title: "Other", value: "other" },
-        ],
-      },
     }),
     defineField({
       name: "image",
