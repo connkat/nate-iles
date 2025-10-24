@@ -1,35 +1,84 @@
+import { sanityFetch } from "../../sanity/lib/live";
+import { urlFor } from "../../sanity/lib/image";
+import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
+
 export const metadata = {
   title: "Projects — Nate Iles",
   description: "Selected professional and personal projects by Nate Iles.",
 };
 
-export default function ProjectsPage() {
+type Project = {
+  _id: string;
+  title: string;
+  slug?: { current: string };
+  description?: string;
+  url?: string;
+  image?: SanityImageSource;
+};
+
+export default async function ProjectsPage() {
+  const { data } = await sanityFetch({
+    query: `*[_type == "project"]|order(_createdAt desc){
+      _id, title, slug, description, url, image
+    }`,
+  });
+  const projects = data as Project[];
+
   return (
     <section className="space-y-6">
       <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">
         Projects
       </h1>
-      <p className="text-black/70 dark:text-white/70 max-w-2xl">
-        <a href="https://soundcloud.com/nathaniles/failing-onwards">
-          Failing Onwards
-        </a>{" "}
-        is a podcast written, recorded, and produced by Nathan Iles. The show
-        explores stories of failure and what we learn from them. This program
-        was originally created as a final project for an Online Journalism class
-        at the Southern Alberta Institute of Technology.
-      </p>
-      <p className="text-black/70 dark:text-white/70 max-w-2xl">
-        <a href="https://heyzine.com/flip-book/4dfc20d45d.html">Why Why See</a>
-        is a concept magazine featuring writing, photography, and layout design
-        by Nathan Iles.
-        <iframe
-          allowFullScreen={true}
-          allow="clipboard-write"
-          className="fp-iframe"
-          src="https://heyzine.com/flip-book/4dfc20d45d.html"
-          style={{ border: "1px solid lightgray", width: "100%", height: 400 }}
-        ></iframe>
-      </p>
+
+      {projects.length === 0 ? (
+        <div className="space-y-4 text-black/70 dark:text-white/70">
+          <p>No projects found yet. Add some in the Studio at /studio.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {projects.map((p: Project) => (
+            <article
+              key={p._id}
+              className="rounded-lg border border-black/10 dark:border-white/10 p-5 space-y-3"
+            >
+              <header className="space-y-1">
+                <h2 className="font-semibold text-lg">{p.title}</h2>
+                {p.description && (
+                  <p className="text-sm text-black/70 dark:text-white/70">
+                    {p.description}
+                  </p>
+                )}
+              </header>
+              {p.image && (
+                <div className="relative w-full aspect-[16/9] overflow-hidden rounded-md">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={urlFor(p.image)
+                      .width(800)
+                      .height(450)
+                      .fit("crop")
+                      .url()}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+              <div className="flex flex-wrap gap-3 text-sm">
+                {p.url && (
+                  <a
+                    className="underline"
+                    href={p.url}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Project Link ↗
+                  </a>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
     </section>
   );
 }
