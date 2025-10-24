@@ -85,28 +85,33 @@ export default function Home() {
           href="/photography"
           className="group rounded-lg border border-black/10 dark:border-white/10 p-5 hover:bg-black/5 dark:hover:bg-white/5 transition"
         >
-          <h2 className="font-medium">Photography →</h2>
-          <p className="text-sm text-black/60 dark:text-white/60">
-            Select shots and albums.
-          </p>
+          <h2 className="font-medium relative inline-block after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-[2px] after:bg-current after:w-0 group-hover:after:w-full after:transition-all after:duration-300">
+            Photography →
+          </h2>
         </Link>
         <Link
           href="/writing"
           className="group rounded-lg border border-black/10 dark:border-white/10 p-5 hover:bg-black/5 dark:hover:bg-white/5 transition"
         >
-          <h2 className="font-medium">Writing →</h2>
-          <p className="text-sm text-black/60 dark:text-white/60">
-            Essays, notes, and posts.
-          </p>
+          <h2 className="font-medium relative inline-block after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-[2px] after:bg-current after:w-0 group-hover:after:w-full after:transition-all after:duration-300">
+            Writing →
+          </h2>
         </Link>
         <Link
           href="/projects"
           className="group rounded-lg border border-black/10 dark:border-white/10 p-5 hover:bg-black/5 dark:hover:bg-white/5 transition"
         >
-          <h2 className="font-medium">Projects →</h2>
-          <p className="text-sm text-black/60 dark:text-white/60">
-            Professional and personal work.
-          </p>
+          <h2 className="font-medium relative inline-block after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-[2px] after:bg-current after:w-0 group-hover:after:w-full after:transition-all after:duration-300">
+            Projects →
+          </h2>
+        </Link>
+        <Link
+          href="/contact"
+          className="group rounded-lg border border-black/10 dark:border-white/10 p-5 hover:bg-black/5 dark:hover:bg-white/5 transition"
+        >
+          <h2 className="font-medium relative inline-block after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-[2px] after:bg-current after:w-0 group-hover:after:w-full after:transition-all after:duration-300">
+            Contact →
+          </h2>
         </Link>
       </div>
     </section>

@@ -20,6 +20,8 @@ export default function Header() {
     { href: "/photography", label: "Photography" },
     { href: "/writing", label: "Writing" },
     { href: "/projects", label: "Projects" },
+		{ href: "/contact", label: "Contact" },
+
   ];
 
   return (
@@ -41,7 +43,6 @@ export default function Header() {
                 "relative px-3 py-1 rounded-md transition",
                 "!no-underline text-black/80 dark:text-white/80",
                 "hover:bg-black/5 dark:hover:bg-white/5",
-                // underline animation using after pseudo element
                 "after:absolute after:left-3 after:right-3 after:-bottom-0.5 after:h-[2px] after:bg-current",
                 active
                   ? "font-semibold after:w-auto"
