@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Link from "next/link";
+import Header from "../components/Header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,18 +26,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background text-foreground`}>
-        <header className="border-b border-black/10 dark:border-white/10">
-          <div className="mx-auto max-w-5xl px-6 py-4 flex items-center justify-between">
-            <Link href="/" className="font-semibold tracking-tight text-lg">
-              Nate Iles
-            </Link>
-            <nav className="flex gap-5 text-sm">
-              <Link href="/bio" className="hover:opacity-80">Bio</Link>
-              <Link href="/photography" className="hover:opacity-80">Photography</Link>
-              <Link href="/projects" className="hover:opacity-80">Projects</Link>
-              <Link href="/writing" className="hover:opacity-80">Writing</Link>
-            </nav>
-          </div>
+        <header className="sticky top-0 z-50 border-b border-black/10 dark:border-white/10 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+          <Header />
         </header>
         <main className="mx-auto max-w-5xl px-6 py-10">
           {children}

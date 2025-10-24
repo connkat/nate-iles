@@ -1,20 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useScrambledTitle, useScrollProgress } from "../hooks/useScramble";
 
 export default function Home() {
-  // Set the scroll range over which the scramble should occur.
-  // Tweak start/end to adjust when the title finishes resolving to the target.
-  const progress = useScrollProgress(50, 400);
-  const title = useScrambledTitle("Nate Iles", "photographer", progress);
-
   return (
     <section className="space-y-10 min-h-[200vh]">
       <div className="space-y-4">
-        <h1 className="text-3xl sm:text-5xl font-semibold tracking-tight" aria-label={progress < 1 ? "Nate Iles" : "photographer"}>
-          {title}
-        </h1>
         <p className="text-black/70 dark:text-white/70 max-w-2xl">
           Hi! I’m Nate, a communications specialist based in
           Mohkinstsis/Calgary. I like punk rock, old movies, Vertigo comics, and
