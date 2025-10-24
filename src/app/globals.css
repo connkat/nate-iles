@@ -22,7 +22,8 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* Use the Tailwind font-sans variable which maps to Space Grotesk via next/font */
+  font-family: var(--font-sans);
 }
 
 /* Global link styles */
