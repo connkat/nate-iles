@@ -11,11 +11,11 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const texts =
     pathname === "/photography"
-      ? ["Nathan Iles", "Photographer"]
+      ? ["Nate Iles", "Photographer"]
       : pathname === "/writing"
-      ? ["Nathan Iles", "Writer"]
+      ? ["Nate Iles", "Writer"]
       : pathname === "/projects"
-      ? ["Nathan Iles", "Punk Rocker"]
+      ? ["Nate Iles", "Punk Rocker"]
       : ["Nate Iles", "Photographer", "Writer", "Punk Rocker"];
   const title = useScrambledSequence(texts, progress, { hold: 0.45 });
   const links = [
@@ -73,7 +73,7 @@ export default function Header() {
       </button>
 
       {open ? (
-        <div className="sm:hidden fixed inset-0 z-[60] bg-white/95 dark:bg-black/95">
+        <div className="sm:hidden fixed inset-0 z-[60] bg-white dark:bg-black">
           <div className="flex items-center justify-between px-4 py-4">
             <Link href="/" className="hover:opacity-90 transition !no-underline" onClick={() => setOpen(false)}>
               <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
@@ -99,10 +99,10 @@ export default function Header() {
                   aria-current={active ? "page" : undefined}
                   className={[
                     "block w-full px-4 py-3 rounded-md text-lg",
-                    "!no-underline text-black dark:text-white",
+                    "!no-underline",
                     active
-                      ? "bg-black text-white dark:bg-white dark:text-black"
-                      : "bg-black/5 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10",
+                      ? "bg-white !text-black dark:bg-white dark:!text-black"
+                      : "bg-neutral-100 hover:bg-neutral-200 text-black dark:text-white dark:bg-neutral-900 dark:hover:bg-neutral-800",
                   ].join(" ")}
                 >
                   {label}
