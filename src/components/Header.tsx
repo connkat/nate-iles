@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useScrambledSequence, useScrollProgress } from "../hooks/useScramble";
+import { useState } from "react";
 
 export default function Header() {
   const pathname = usePathname();
   const progress = useScrollProgress(50, 300);
+  const [open, setOpen] = useState(false);
   const texts =
     pathname === "/photography"
       ? ["Nathan Iles", "Photographer"]
@@ -25,13 +27,14 @@ export default function Header() {
   ];
 
   return (
-    <div className="px-2 sm:px-3 md:px-4 lg:px-6 py-4 flex items-center justify-between">
+    <div className="sticky top-0 z-50 px-2 sm:px-3 md:px-4 lg:px-6 py-4 flex items-center justify-between bg-white/80 dark:bg-black/60 backdrop-blur supports-[backdrop-filter]:bg-white/60">
       <Link href="/" className="hover:opacity-90 transition !no-underline">
         <h1 className="text-3xl sm:text-5xl font-semibold tracking-tight">
           {title}
         </h1>
       </Link>
-      <nav className="flex gap-2 text-sm">
+      {/* Desktop nav */}
+      <nav className="hidden sm:flex gap-2 text-sm">
         {links.map(({ href, label }) => {
           const active = pathname === href;
           return (
@@ -54,6 +57,61 @@ export default function Header() {
           );
         })}
       </nav>
+
+      {/* Mobile hamburger */}
+      <button
+        type="button"
+        className="sm:hidden p-2 rounded-md border border-black/10 dark:border-white/15 text-black dark:text-white"
+        aria-label="Open menu"
+        aria-expanded={open ? "true" : "false"}
+        onClick={() => setOpen(true)}
+      >
+        {/* Simple hamburger icon */}
+        <span className="block w-5 h-0.5 bg-current mb-1" />
+        <span className="block w-5 h-0.5 bg-current mb-1" />
+        <span className="block w-5 h-0.5 bg-current" />
+      </button>
+
+      {open ? (
+        <div className="sm:hidden fixed inset-0 z-50 bg-white dark:bg-black">
+          <div className="flex items-center justify-between px-4 py-4">
+            <Link href="/" className="hover:opacity-90 transition !no-underline" onClick={() => setOpen(false)}>
+              <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
+            </Link>
+            <button
+              type="button"
+              className="p-2 rounded-md border border-black/10 dark:border-white/15 text-black dark:text-white"
+              aria-label="Close menu"
+              onClick={() => setOpen(false)}
+            >
+              <span className="block w-5 h-0.5 rotate-45 translate-y-[3px] bg-current" />
+              <span className="block w-5 h-0.5 -rotate-45 -translate-y-[3px] bg-current" />
+            </button>
+          </div>
+          <nav className="px-4 pt-6 space-y-2">
+            {links.map(({ href, label }) => {
+              const active = pathname === href;
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={() => setOpen(false)}
+                  aria-current={active ? "page" : undefined}
+                  className={[
+                    "block w-full px-4 py-3 rounded-md text-lg",
+                    "!no-underline text-black dark:text-white",
+                    active
+                      ? "bg-black text-white dark:bg-white dark:text-black"
+                      : "bg-black/5 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10",
+                  ].join(" ")}
+                >
+                  {label}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+      ) : null}
     </div>
   );
 }
