@@ -13,13 +13,14 @@ type Project = {
   slug?: { current: string };
   description?: string;
   url?: string;
+  embedHtml?: string;
   image?: SanityImageSource;
 };
 
 export default async function ProjectsPage() {
   const { data } = await sanityFetch({
     query: `*[_type == "project"]|order(_createdAt desc){
-      _id, title, slug, description, url, image
+      _id, title, slug, description, url, embedHtml, image
     }`,
   });
   const projects = data as Project[];
@@ -49,7 +50,9 @@ export default async function ProjectsPage() {
                   </p>
                 )}
               </header>
-              {p.image && (
+              {p.embedHtml ? (
+                <div className="w-full" dangerouslySetInnerHTML={{ __html: p.embedHtml }} />
+              ) : p.image ? (
                 <div className="relative w-full aspect-[16/9] overflow-hidden rounded-md">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
@@ -62,7 +65,7 @@ export default async function ProjectsPage() {
                     className="w-full h-full object-cover"
                   />
                 </div>
-              )}
+              ) : null}
               <div className="flex flex-wrap gap-3 text-sm">
                 {p.url && (
                   <a

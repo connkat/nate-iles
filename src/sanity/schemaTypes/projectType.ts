@@ -31,6 +31,12 @@ export const projectType = defineType({
       description: "Link to project page",
     }),
     defineField({
+      name: "embedHtml",
+      type: "text",
+      title: "Embed HTML",
+      description: "Paste iframe HTML from a trusted provider",
+    }),
+    defineField({
       name: "image",
       type: "image",
       title: "Cover Image",

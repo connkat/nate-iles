@@ -1,48 +1,44 @@
-import fs from "fs";
-import path from "path";
 import Image from "next/image";
-import imageSize from "image-size";
+import { sanityFetch } from "../../sanity/lib/live";
+import { urlFor } from "../../sanity/lib/image";
+import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 
 export const metadata = {
   title: "Photography — Nate Iles",
   description: "Select photography shots and albums by Nate Iles.",
 };
 
-type PhotoMeta = { src: string; width: number; height: number };
+type PhotographyImage = {
+  image: SanityImageSource;
+  width?: number;
+  height?: number;
+  description?: string;
+};
+type PhotographyDoc = {
+  _id: string;
+  title?: string;
+  description?: string;
+  images?: PhotographyImage[];
+};
 
-function getPhotoMeta(): PhotoMeta[] {
-  const photosDir = path.join(process.cwd(), "public", "photos");
-  const allowed = new Set([".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif"]);
-
-  const results: PhotoMeta[] = [];
-
-  function walk(dir: string, baseUrl: string) {
-    if (!fs.existsSync(dir)) return;
-    const entries = fs.readdirSync(dir, { withFileTypes: true });
-    for (const entry of entries) {
-      const abs = path.join(dir, entry.name);
-      const url = path.posix.join(baseUrl, entry.name);
-      if (entry.isDirectory()) {
-        walk(abs, url);
-      } else {
-        const ext = path.extname(entry.name).toLowerCase();
-        if (allowed.has(ext)) {
-          const fileBuf = fs.readFileSync(abs);
-          const dim = imageSize(fileBuf);
-          if (dim.width && dim.height) {
-            results.push({ src: url, width: dim.width, height: dim.height });
-          }
-        }
-      }
-    }
-  }
-
-  walk(photosDir, "/photos");
-  return results;
-}
-
-export default function PhotographyPage() {
-  const photos = getPhotoMeta();
+export default async function PhotographyPage() {
+  const { data } = await sanityFetch({
+    query: `*[_type == "photography"]|order(_createdAt desc){
+      _id,
+      title,
+      description,
+      images[]{
+        // Support both shapes: {image: {...}} and direct image items
+        "image": coalesce(image, @),
+        "width": coalesce(image.asset->metadata.dimensions.width, asset->metadata.dimensions.width),
+        "height": coalesce(image.asset->metadata.dimensions.height, asset->metadata.dimensions.height),
+        // Prefer the parent (document) description for overlay
+        "description": coalesce(^.description, description, "")
+      }[defined(image.asset)]
+    }`,
+  });
+  const docs = data as PhotographyDoc[];
+  const images = docs.flatMap((d) => d.images ?? []);
 
   return (
     <section className="space-y-6">
@@ -52,27 +48,43 @@ export default function PhotographyPage() {
         </h1>
       </header>
 
-      {photos.length === 0 ? (
+      {images.length === 0 ? (
         <p className="text-black/60 dark:text-white/60">
-          No photos found in <code>public/photos</code>.
+          No photos found. Add some in the Studio at /studio.
         </p>
       ) : (
-        <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 [column-fill:_balance]">
-          {photos.map(({ src, width, height }) => (
-            <figure
-              key={src}
-              className="mb-4 break-inside-avoid rounded overflow-hidden"
-            >
-              <Image
-                src={src}
-                alt=""
-                width={width}
-                height={height}
-                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                className="w-full h-auto object-cover transition hover:opacity-90"
-              />
-            </figure>
-          ))}
+        <div className="columns-2 lg:columns-3 gap-4 [column-fill:_balance]">
+          {images.map((img, idx) => {
+            const isHero = idx % 8 === 0; // tweak cadence to taste
+            const baseW = img.width ?? 1200;
+            const baseH = img.height ?? 800;
+            const width = isHero ? Math.max(1800, baseW) : baseW;
+            const height = isHero ? Math.round(baseH * (width / baseW)) : baseH;
+
+            return (
+              <figure
+                key={idx}
+                className="group relative mb-4 break-inside-avoid rounded overflow-hidden"
+                style={undefined}
+              >
+                <Image
+                  src={urlFor(img.image).width(width).fit("max").url()}
+                  alt="photography sample"
+                  width={width}
+                  height={height}
+                  sizes={"50vw"}
+                  className="w-full h-auto object-cover transition duration-200 group-hover:opacity-90"
+                />
+                {img.description ? (
+                  <figcaption className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 transition-opacity duration-200 group-hover:opacity-100 flex items-end">
+                    <p className="p-3 text-sm text-white/95">
+                      {img.description}
+                    </p>
+                  </figcaption>
+                ) : null}
+              </figure>
+            );
+          })}
         </div>
       )}
     </section>
