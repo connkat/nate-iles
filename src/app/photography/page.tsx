@@ -18,7 +18,9 @@ type PhotographyDoc = {
   _id: string;
   title?: string;
   description?: string;
-  images?: PhotographyImage[];
+  image?: SanityImageSource;
+  width?: number;
+  height?: number;
 };
 
 export default async function PhotographyPage() {
@@ -27,18 +29,20 @@ export default async function PhotographyPage() {
       _id,
       title,
       description,
-      images[]{
-        // Support both shapes: {image: {...}} and direct image items
-        "image": coalesce(image, @),
-        "width": coalesce(image.asset->metadata.dimensions.width, asset->metadata.dimensions.width),
-        "height": coalesce(image.asset->metadata.dimensions.height, asset->metadata.dimensions.height),
-        // Prefer the parent (document) description for overlay
-        "description": coalesce(^.description, description, "")
-      }[defined(image.asset)]
+      image,
+      "width": image.asset->metadata.dimensions.width,
+      "height": image.asset->metadata.dimensions.height
     }`,
   });
   const docs = data as PhotographyDoc[];
-  const images = docs.flatMap((d) => d.images ?? []);
+  const images: PhotographyImage[] = docs
+    .filter((d) => d.image)
+    .map((d) => ({
+      image: d.image as SanityImageSource,
+      width: d.width,
+      height: d.height,
+      description: d.description ?? "",
+    }));
 
   return (
     <section className="space-y-6">
