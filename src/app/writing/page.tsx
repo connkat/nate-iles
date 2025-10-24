@@ -3,6 +3,7 @@ import { urlFor } from "@/sanity/lib/image";
 import Image from "next/image";
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import Link from "next/link";
+import CategoryFilter from "@/components/CategoryFilter";
 
 export const metadata = {
   title: "Writing — Nate Iles",
@@ -58,17 +59,11 @@ export default async function WritingPage({
   return (
     <section className="space-y-6">
       <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">Writing</h1>
-      <div className="flex flex-wrap gap-2">
-        <FilterChip label="All" href="/writing" active={!selectedCategory} />
-        {categories.map((cat) => (
-          <FilterChip
-            key={cat}
-            label={cat}
-            href={`/writing?category=${encodeURIComponent(cat)}`}
-            active={selectedCategory === cat}
-          />
-        ))}
-      </div>
+      <CategoryFilter
+        categories={categories}
+        selectedCategory={selectedCategory}
+        basePath="/writing"
+      />
       <div className="grid gap-6 sm:grid-cols-2">
         {data.map((item) => {
           const href = item.url ?? "#";
@@ -119,33 +114,4 @@ export default async function WritingPage({
   );
 }
 
-function FilterChip({
-  label,
-  href,
-  active,
-}: {
-  label: string;
-  href: string;
-  active?: boolean;
-}) {
-  return (
-    <Link
-      href={href}
-      aria-current={active ? "true" : undefined}
-      className={[
-        "px-3 py-1 text-sm rounded-full border transition-colors",
-        active
-          ? [
-              "bg-white !text-black border-black hover:!text-black",
-              "dark:bg-white dark:!text-black dark:border-white dark:hover:!text-black",
-            ].join(" ")
-          : [
-              "border-black/10 text-black/70 hover:text-black hover:bg-black/5",
-              "dark:border-white/15 dark:text-white/70 dark:hover:text-white dark:hover:bg-white/5",
-            ].join(" "),
-      ].join(" ")}
-    >
-      {label}
-    </Link>
-  );
-}
+ 
