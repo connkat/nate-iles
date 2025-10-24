@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
+// Image import removed; using canvas-based ScrambleImage instead
+import ScrambleImage from "../components/ScrambleImage";
 import { useScrollProgress } from "../hooks/useScramble";
 
 export default function Home() {
   const imgProgress = useScrollProgress(0, 400);
-  const scale = 0.9 + 0.1 * imgProgress; // 0.9 -> 1
+  // Show full-size image (no zoom). Keep a subtle fade-in if desired.
+  const scale = 1;
   const opacity = 0.2 + 0.8 * imgProgress; // 0.2 -> 1
 
   return (
@@ -59,20 +61,18 @@ export default function Home() {
             authentic voice; I&apos;ll help you find it!
           </p>
         </div>
-        <div className="flex items-start justify-end sm:col-span-2 self-start -mt-1 sm:-mt-1.5">
-          <div className="overflow-hidden rounded-lg w-full max-w-[640px] md:max-w-[700px] lg:max-w-[720px]">
-            <Image
+        <div className="flex items-start justify-end sm:col-span-2 self-start">
+          <div className="w-full max-w-[520px] md:max-w-[560px] lg:max-w-[600px]">
+            <ScrambleImage
               src="/headshots/001-transparent.png"
-              alt="Nathan Iles headshot"
               width={720}
               height={720}
-              sizes="(min-width: 1280px) 35vw, (min-width: 1024px) 40vw, (min-width: 640px) 50vw, 100vw"
-              priority
-              className="block will-change-transform w-full h-auto"
+              progress={imgProgress}
+              cropTop={0}
               style={{
-                transform: `translateY(-120px) scale(${scale})`,
+                transform: `scale(${scale})`,
                 transformOrigin: "top right",
-                opacity,
+                opacity: opacity,
                 transition: "transform 120ms linear, opacity 120ms linear",
               }}
             />
