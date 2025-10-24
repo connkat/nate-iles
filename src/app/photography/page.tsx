@@ -57,7 +57,7 @@ export default async function PhotographyPage() {
           No photos found. Add some in the Studio at /studio.
         </p>
       ) : (
-        <div className="columns-2 lg:columns-3 gap-4 [column-fill:_balance]">
+        <div className="columns-1 lg:columns-2 xl:columns-3 gap-4 [column-fill:_balance]">
           {images.map((img, idx) => {
             const isHero = idx % 8 === 0; // tweak cadence to taste
             const baseW = img.width ?? 1200;
@@ -76,7 +76,7 @@ export default async function PhotographyPage() {
                   alt="photography sample"
                   width={width}
                   height={height}
-                  sizes={"50vw"}
+                  sizes={"(min-width: 1280px) 33vw, (min-width: 1024px) 50vw, 100vw"}
                   className="w-full h-auto object-cover transition duration-200 group-hover:opacity-90"
                 />
                 {img.description ? (
