@@ -32,19 +32,19 @@ async function getData(category?: string): Promise<Writing[]> {
     category,
     image
   }`;
-  const { data } = await sanityFetch({
+  const { data }: { data: Writing[] | undefined } = await sanityFetch({
     query: base,
     params: category ? { category } : {},
   });
-  return data as Writing[];
+  return data ?? [];
 }
 
 async function getCategories(): Promise<string[]> {
-  const { data: cats } = await sanityFetch({
+  const { data: cats }: { data: string[] | undefined } = await sanityFetch({
     query: `*[_type == "writing" && defined(category)].category`,
   });
   // de-duplicate and stable sort
-  return Array.from(new Set(cats)).sort();
+  return Array.from(new Set(cats ?? [])).sort();
 }
 
 export default async function WritingPage({
