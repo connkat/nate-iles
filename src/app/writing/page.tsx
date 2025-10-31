@@ -1,4 +1,4 @@
-import { client } from "@/sanity/lib/client";
+import { sanityFetch } from "@/sanity/lib/live";
 import { urlFor } from "@/sanity/lib/image";
 import Image from "next/image";
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
@@ -6,8 +6,8 @@ import Link from "next/link";
 import CategoryFilter from "@/components/CategoryFilter";
 
 export const metadata = {
-  title: "Writing — Nate Iles",
-  description: "Essays, notes, and posts by Nate Iles.",
+  title: "Writing — Nathan Iles",
+  description: "Essays, notes, and posts by Nathan Iles.",
 };
 
 type Writing = {
@@ -32,13 +32,17 @@ async function getData(category?: string): Promise<Writing[]> {
     category,
     image
   }`;
-  return client.fetch<Writing[]>(base, category ? { category } : {});
+  const { data } = await sanityFetch({
+    query: base,
+    params: category ? { category } : {},
+  });
+  return data as Writing[];
 }
 
 async function getCategories(): Promise<string[]> {
-  const cats = await client.fetch<string[]>(
-    `*[_type == "writing" && defined(category)].category`
-  );
+  const { data: cats } = await sanityFetch({
+    query: `*[_type == "writing" && defined(category)].category`,
+  });
   // de-duplicate and stable sort
   return Array.from(new Set(cats)).sort();
 }
@@ -59,7 +63,9 @@ export default async function WritingPage({
   ]);
   return (
     <section className="space-y-6">
-      <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">Writing</h1>
+      <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">
+        Writing
+      </h1>
       <CategoryFilter
         categories={categories}
         selectedCategory={selectedCategory}
@@ -73,7 +79,11 @@ export default async function WritingPage({
               {item.image ? (
                 <div className="relative h-24 w-24 flex-none overflow-hidden rounded-md border border-black/10 dark:border-white/10">
                   <Image
-                    src={urlFor(item.image).width(200).height(200).fit("crop").url()}
+                    src={urlFor(item.image)
+                      .width(200)
+                      .height(200)
+                      .fit("crop")
+                      .url()}
                     alt={item.title}
                     fill
                     sizes="96px"
@@ -114,5 +124,3 @@ export default async function WritingPage({
     </section>
   );
 }
-
- 

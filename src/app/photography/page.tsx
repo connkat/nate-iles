@@ -4,8 +4,8 @@ import { urlFor } from "../../sanity/lib/image";
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 
 export const metadata = {
-  title: "Photography — Nate Iles",
-  description: "Select photography shots and albums by Nate Iles.",
+  title: "Photography — Nathan Iles",
+  description: "Select photography shots and albums by Nathan Iles.",
 };
 
 type PhotographyImage = {

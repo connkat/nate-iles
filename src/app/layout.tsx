@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Nate Iles — Portfolio",
-  description: "Portfolio and resume site for Nate Iles: bio, photography, projects, and writing.",
+  title: "Nathan Iles — Portfolio",
+  description: "Portfolio and resume site for Nathan Iles: bio, photography, projects, and writing.",
   icons: {
     icon: '/favicon.ico',
   },
@@ -39,7 +39,7 @@ export default function RootLayout({
         </main>
         <footer className="mt-12 border-t border-black/10 dark:border-white/10">
           <div className="px-2 sm:px-3 md:px-4 lg:px-6 py-6 text-xs text-black/60 dark:text-white/60">
-            © {new Date().getFullYear()} Nate Iles. All rights reserved.
+            © {new Date().getFullYear()} Nathan Iles. All rights reserved.
           </div>
         </footer>
       </body>

@@ -11,19 +11,18 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const texts =
     pathname === "/photography"
-      ? ["Nate Iles", "Photographer"]
+      ? ["Nathan Iles", "Photographer"]
       : pathname === "/writing"
-      ? ["Nate Iles", "Writer"]
-      : pathname === "/projects"
-      ? ["Nate Iles", "Punk Rocker"]
-      : ["Nate Iles", "Photographer", "Writer", "Punk Rocker"];
+        ? ["Nathan Iles", "Writer"]
+        : pathname === "/projects"
+          ? ["Nathan Iles", "Punk Rocker"]
+          : ["Nathan Iles", "Writer", "Photographer", "Punk Rocker"];
   const title = useScrambledSequence(texts, progress, { hold: 0.45 });
   const links = [
     { href: "/photography", label: "Photography" },
     { href: "/writing", label: "Writing" },
     { href: "/projects", label: "Projects" },
-		{ href: "/contact", label: "Contact" },
-
+    { href: "/contact", label: "Contact" },
   ];
 
   return (
@@ -75,7 +74,11 @@ export default function Header() {
       {open ? (
         <div className="sm:hidden fixed inset-0 z-[60] bg-white dark:bg-black">
           <div className="flex items-center justify-between px-4 py-4">
-            <Link href="/" className="hover:opacity-90 transition !no-underline" onClick={() => setOpen(false)}>
+            <Link
+              href="/"
+              className="hover:opacity-90 transition !no-underline"
+              onClick={() => setOpen(false)}
+            >
               <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
             </Link>
             <button
