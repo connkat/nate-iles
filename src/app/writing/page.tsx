@@ -17,19 +17,19 @@ type Writing = {
   url?: string | null;
   publishedAt: string;
   excerpt?: string | null;
-  category?: string | null;
+  categoryTitle?: string | null;
   image?: SanityImageSource | null;
 };
 
 async function getData(category?: string): Promise<Writing[]> {
-  const base = `*[_type == "writing"${category ? " && category == $category" : ""}]|order(publishedAt desc){
+  const base = `*[_type == "writing"${category ? " && category->title == $category" : ""}]|order(publishedAt desc){
     _id,
     title,
     slug,
     url,
     publishedAt,
     excerpt,
-    category,
+    "categoryTitle": category->title,
     image
   }`;
   const { data }: { data: Writing[] | undefined } = await sanityFetch({
@@ -41,10 +41,9 @@ async function getData(category?: string): Promise<Writing[]> {
 
 async function getCategories(): Promise<string[]> {
   const { data: cats }: { data: string[] | undefined } = await sanityFetch({
-    query: `*[_type == "writing" && defined(category)].category`,
+    query: `*[_type == "writingCategory"]|order(title asc).title`,
   });
-  // de-duplicate and stable sort
-  return Array.from(new Set(cats ?? [])).sort();
+  return cats ?? [];
 }
 
 export default async function WritingPage({
@@ -104,14 +103,14 @@ export default async function WritingPage({
                 ) : null}
                 <div className="text-xs text-black/60 dark:text-white/60">
                   <span>{new Date(item.publishedAt).toLocaleDateString()}</span>
-                  {item.category ? (
+                  {item.categoryTitle ? (
                     <>
                       <span> • </span>
                       <Link
-                        href={`/writing?category=${encodeURIComponent(item.category)}`}
+                        href={`/writing?category=${encodeURIComponent(item.categoryTitle)}`}
                         className="underline-offset-2 hover:underline"
                       >
-                        {item.category}
+                        {item.categoryTitle}
                       </Link>
                     </>
                   ) : null}

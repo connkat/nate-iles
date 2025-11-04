@@ -19,15 +19,9 @@ export const writingType = defineType({
     defineField({
       name: "category",
       title: "Category",
-      type: "string",
-      options: {
-        list: [
-          { title: "Copywriting", value: "copywriting" },
-          { title: "Bylines", value: "bylines" },
-          { title: "Biographies", value: "biographies" },
-          { title: "Other", value: "other" },
-        ],
-      },
+      type: "reference",
+      to: [{ type: "writingCategory" }],
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: "url",

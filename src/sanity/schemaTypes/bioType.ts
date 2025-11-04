@@ -9,12 +9,14 @@ export const bioType = defineType({
       name: "title",
       title: "Title",
       type: "string",
+      description: "Not shown on the page, just for internal tracking",
       validation: (rule) => rule.required(),
     }),
     defineField({
       name: "content",
       title: "Content",
       type: "array",
+      description:"Edit and update this bio, do not add a new one.",
       of: [
         {
           type: "block",
