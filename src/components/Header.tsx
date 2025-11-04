@@ -10,17 +10,17 @@ export default function Header() {
   const progress = useScrollProgress(50, 300);
   const [open, setOpen] = useState(false);
   const texts =
-    pathname === "/photography"
-      ? ["Nathan Iles", "Photographer"]
-      : pathname === "/writing"
-        ? ["Nathan Iles", "Writer"]
+    pathname === "/writing"
+      ? ["Nathan Iles", "Writer"]
+      : pathname === "/photography"
+        ? ["Nathan Iles", "Photographer"]
         : pathname === "/projects"
           ? ["Nathan Iles", "Punk Rocker"]
           : ["Nathan Iles", "Writer", "Photographer", "Punk Rocker"];
   const title = useScrambledSequence(texts, progress, { hold: 0.45 });
   const links = [
-    { href: "/photography", label: "Photography" },
     { href: "/writing", label: "Writing" },
+    { href: "/photography", label: "Photography" },
     { href: "/projects", label: "Projects" },
     { href: "/contact", label: "Contact" },
   ];

@@ -82,19 +82,19 @@ export default function Home() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Link
-          href="/photography"
-          className="group rounded-lg border border-black/10 dark:border-white/10 p-5 hover:bg-black/5 dark:hover:bg-white/5 transition"
-        >
-          <h2 className="font-medium relative inline-block after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-[2px] after:bg-current after:w-0 group-hover:after:w-full after:transition-all after:duration-300">
-            Photography →
-          </h2>
-        </Link>
-        <Link
           href="/writing"
           className="group rounded-lg border border-black/10 dark:border-white/10 p-5 hover:bg-black/5 dark:hover:bg-white/5 transition"
         >
           <h2 className="font-medium relative inline-block after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-[2px] after:bg-current after:w-0 group-hover:after:w-full after:transition-all after:duration-300">
             Writing →
+          </h2>
+        </Link>
+        <Link
+          href="/photography"
+          className="group rounded-lg border border-black/10 dark:border-white/10 p-5 hover:bg-black/5 dark:hover:bg-white/5 transition"
+        >
+          <h2 className="font-medium relative inline-block after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-[2px] after:bg-current after:w-0 group-hover:after:w-full after:transition-all after:duration-300">
+            Photography →
           </h2>
         </Link>
         <Link

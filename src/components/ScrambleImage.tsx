@@ -153,7 +153,7 @@ export default function ScrambleImage({
         );
       }
     }
-  }, [imgEl, width, height, cropTop, cols, rows, permutation, progress]);
+  }, [imgEl, width, height, cropTop, cols, rows, permutation, progress, resolveAt]);
 
   const arH = Math.max(1, height - cropTop);
   const mergedStyle: React.CSSProperties = {
