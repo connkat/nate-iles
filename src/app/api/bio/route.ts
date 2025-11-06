@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { client } from "../../../sanity/lib/client";
 
-const BIO_QUERY = `*[_type == "bio"][0]{ title, content }`;
+const BIO_QUERY = `*[_type == "bio"][0]{ title, tagline, content }`;
 
 export async function GET() {
   try {

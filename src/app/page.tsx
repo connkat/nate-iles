@@ -12,6 +12,7 @@ export default function Home() {
   const imgProgress = useScrollProgress(0, 400);
   const [bio, setBio] = useState<{
     title?: string;
+    tagline?: string;
     content?: PortableTextBlock[];
   } | null>(null);
 
@@ -38,9 +39,13 @@ export default function Home() {
       {/* Callout sits above the two-column grid so the image aligns with the next content */}
       <div className="rounded-lg border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 mx-6 sm:mx-10 md:mx-16 lg:mx-24 xl:mx-32 p-4">
         <h3 className="text-xl sm:text-2xl font-semibold tracking-tight">
-          Hi! I’m Nate, a communications specialist based in
-          Mohkinstsis/Calgary. I like punk rock, old movies, Vertigo comics, and
-          (most of all) writing … lots and lots of writing!
+          {bio?.tagline || (
+            <>
+              Hi! I’m Nate, a communications specialist based in
+              {' '}Mohkinstsis/Calgary. I like punk rock, old movies, Vertigo comics, and
+              {' '}(most of all) writing … lots and lots of writing!
+            </>
+          )}
         </h3>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-5 gap-2 items-start">

@@ -13,10 +13,17 @@ export const bioType = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: "tagline",
+      title: "Tagline",
+      type: "string",
+      description: "Top of the landing page text",
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
       name: "content",
       title: "Content",
       type: "array",
-      description:"Edit and update this bio, do not add a new one.",
+      description: "Edit and update this bio, do not add a new one.",
       of: [
         {
           type: "block",
