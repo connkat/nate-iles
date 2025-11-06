@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { sanityFetch } from "../../sanity/lib/live";
 import { urlFor } from "../../sanity/lib/image";
+import BubbleCanvas from "@/components/BubbleCanvas";
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 
 export const metadata = {
@@ -45,7 +46,9 @@ export default async function PhotographyPage() {
     }));
 
   return (
-    <section className="space-y-6">
+    <section className="relative space-y-6">
+      {/* 3D bubble background */}
+      <BubbleCanvas strength={1.0} />
       <header className="space-y-2">
         <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">
           Photography
