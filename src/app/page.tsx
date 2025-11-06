@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { PortableText } from "@portabletext/react";
 import type { PortableTextBlock } from "@portabletext/types";
-// Image import removed; using canvas-based ScrambleImage instead
 import ScrambleImage from "../components/ScrambleImage";
 import { useScrollProgress } from "../hooks/useScramble";
 
@@ -30,13 +29,11 @@ export default function Home() {
       active = false;
     };
   }, []);
-  // Show full-size image (no zoom). Keep a subtle fade-in if desired.
   const scale = 1;
   const opacity = 0.2 + 0.8 * imgProgress; // 0.2 -> 1
 
   return (
     <section className="space-y-10">
-      {/* Callout sits above the two-column grid so the image aligns with the next content */}
       <div className="rounded-lg border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 mx-6 sm:mx-10 md:mx-16 lg:mx-24 xl:mx-32 p-4">
         <h3 className="text-xl sm:text-2xl font-semibold tracking-tight">
           {bio?.tagline || (

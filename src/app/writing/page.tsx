@@ -2,7 +2,6 @@ import { sanityFetch } from "@/sanity/lib/live";
 import { urlFor } from "@/sanity/lib/image";
 import Image from "next/image";
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
-import Link from "next/link";
 import CategoryFilter from "@/components/CategoryFilter";
 
 export const metadata = {
@@ -56,10 +55,18 @@ export default async function WritingPage({
   const selectedCategory = Array.isArray(selectedCategoryParam)
     ? selectedCategoryParam[0]
     : selectedCategoryParam;
-  const [data, categories] = await Promise.all([
-    getData(selectedCategory),
-    getCategories(),
-  ]);
+  const categories = await getCategories();
+  let sections: { category: string; items: Writing[] }[] = [];
+  if (selectedCategory) {
+    const items = await getData(selectedCategory);
+    sections = [{ category: selectedCategory, items }];
+  } else {
+    const itemsByCategory = await Promise.all(
+      categories.map((cat) => getData(cat))
+    );
+    sections = categories.map((cat, i) => ({ category: cat, items: itemsByCategory[i] }));
+  }
+  sections = sections.filter(({ items }) => items.length > 0);
   return (
     <section className="space-y-6">
       <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">
@@ -70,56 +77,74 @@ export default async function WritingPage({
         selectedCategory={selectedCategory}
         basePath="/writing"
       />
-      <div className="grid gap-6 sm:grid-cols-2">
-        {data.map((item) => {
-          const href = item.url ?? "#";
-          return (
-            <article key={item._id} className="flex gap-4">
-              {item.image ? (
-                <div className="relative h-24 w-24 flex-none overflow-hidden rounded-md border border-black/10 dark:border-white/10">
-                  <Image
-                    src={urlFor(item.image)
-                      .width(200)
-                      .height(200)
-                      .fit("crop")
-                      .url()}
-                    alt={item.title}
-                    fill
-                    sizes="96px"
-                    className="object-cover"
-                  />
-                </div>
-              ) : null}
-              <div className="space-y-1">
-                <h2 className="text-lg font-medium">
-                  <a href={href} className="hover:underline">
-                    {item.title}
-                  </a>
-                </h2>
-                {item.excerpt ? (
-                  <p className="text-sm text-black/70 dark:text-white/70 max-w-prose">
-                    {item.excerpt}
-                  </p>
-                ) : null}
-                <div className="text-xs text-black/60 dark:text-white/60">
-                  <span>{new Date(item.publishedAt).toLocaleDateString()}</span>
-                  {item.categoryTitle ? (
-                    <>
-                      <span> • </span>
-                      <Link
-                        href={`/writing?category=${encodeURIComponent(item.categoryTitle)}`}
-                        className="underline-offset-2 hover:underline"
-                      >
-                        {item.categoryTitle}
-                      </Link>
-                    </>
-                  ) : null}
-                </div>
-              </div>
-            </article>
-          );
-        })}
-      </div>
+      {sections.map(({ category, items }) => (
+        <div key={category} className="space-y-3">
+          <h2 className="text-xl font-medium tracking-tight">{category}</h2>
+          <div className="-mx-4 overflow-x-auto">
+            <div className="px-4 flex gap-4 snap-x snap-mandatory">
+              {items.map((item) => {
+                const href = item.url ?? "#";
+                return (
+                  <article
+                    key={item._id}
+                    className="flex-none w-56 sm:w-80 snap-start"
+                  >
+                    {item.image ? (
+                      <div className="relative h-[75vh] sm:h-56 w-full overflow-hidden rounded-lg border border-black/10 dark:border-white/10">
+                        <Image
+                          src={urlFor(item.image)
+                            .width(900)
+                            .height(600)
+                            .fit("crop")
+                            .url()}
+                          alt={item.title}
+                          fill
+                          sizes="(max-width: 640px) 224px, 320px"
+                          className="object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                        <a href={href} className="absolute inset-0 p-4 flex flex-col justify-end gap-1 focus:outline-none">
+                          <h3
+                            className="text-white text-lg font-semibold leading-tight"
+                            style={{ textShadow: "0 0 2px rgba(0,0,0,0.9), 0 1px 2px rgba(0,0,0,0.9), 0 -1px 2px rgba(0,0,0,0.9), 1px 0 2px rgba(0,0,0,0.9), -1px 0 2px rgba(0,0,0,0.9)" }}
+                          >
+                            {item.title}
+                          </h3>
+                          {item.excerpt ? (
+                            <p
+                              className="text-white/95 text-sm line-clamp-3"
+                              style={{ textShadow: "0 0 2px rgba(0,0,0,0.9), 0 1px 2px rgba(0,0,0,0.9), 0 -1px 2px rgba(0,0,0,0.9), 1px 0 2px rgba(0,0,0,0.9), -1px 0 2px rgba(0,0,0,0.9)" }}
+                            >
+                              {item.excerpt}
+                            </p>
+                          ) : null}
+                        </a>
+                      </div>
+                    ) : (
+                      <a href={href} className="relative h-[75vh] sm:h-56 w-full overflow-hidden rounded-lg border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 p-4 flex flex-col justify-end">
+                        <h3
+                          className="text-white text-lg font-semibold leading-tight"
+                          style={{ textShadow: "0 0 2px rgba(0,0,0,0.9), 0 1px 2px rgba(0,0,0,0.9), 0 -1px 2px rgba(0,0,0,0.9), 1px 0 2px rgba(0,0,0,0.9), -1px 0 2px rgba(0,0,0,0.9)" }}
+                        >
+                          {item.title}
+                        </h3>
+                        {item.excerpt ? (
+                          <p
+                            className="text-white/95 text-sm line-clamp-3"
+                            style={{ textShadow: "0 0 2px rgba(0,0,0,0.9), 0 1px 2px rgba(0,0,0,0.9), 0 -1px 2px rgba(0,0,0,0.9), 1px 0 2px rgba(0,0,0,0.9), -1px 0 2px rgba(0,0,0,0.9)" }}
+                          >
+                            {item.excerpt}
+                          </p>
+                        ) : null}
+                      </a>
+                    )}
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      ))}
     </section>
   );
 }
